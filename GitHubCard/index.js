@@ -2,7 +2,13 @@
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
-
+// axios.get('https://api.github.com/users/bigknell')
+// .then( response => {
+//   document.querySelector('.cards').appendChild(userCard(response.data))
+// })
+// .catch( error => {
+//   console.log( error )
+// })
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -24,8 +30,72 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell', 'mwoodiwiss'];
 
+
+followersArray.forEach((name) => {
+  axios.get(`https://api.github.com/users/${name}`)
+  .then( response => {
+      console.log(document.querySelector('.cards').appendChild(userCard(response.data)))
+    })
+    .catch( error => {
+      console.log( error )
+}) 
+})
+
+
+
+function userCard(array) {
+  const container = document.createElement('div')
+  container.classList.add('card')
+
+  const image = document.createElement('img')
+  image.src = array.avatar_url
+  container.appendChild(image)
+
+  const cardInfo = document.createElement('div')
+  cardInfo.classList.add('card-info')
+  container.appendChild(cardInfo)
+
+  const title = document.createElement('h3')
+  title.classList.add('name')
+  title.textContent = array.name
+  cardInfo.appendChild(title)
+
+  const uName = document.createElement('p')
+  uName.classList.add('username')
+  uName.textContent = array.login
+  cardInfo.appendChild(uName)
+
+  const location = document.createElement('p')
+  location.textContent = `Location: ${array.location}`
+  cardInfo.appendChild(location)
+
+  const profile = document.createElement('p')
+  profile.textContent = 'Profile: '
+  cardInfo.appendChild(profile)
+
+  const link = document.createElement('a')
+  link.href = array.html_url
+  link.textContent = array.html_url
+  profile.appendChild(link)
+
+  const followers = document.createElement('p')
+  followers.textContent = `Followers: ${array.followers}`
+  cardInfo.appendChild(followers)
+
+  const following = document.createElement('p')
+  following.textContent = `Following: ${array.following}`
+  cardInfo.appendChild(following)
+
+  const bio = document.createElement('p')
+  bio.textContent = `Bio: ${array.bio}`
+  cardInfo.appendChild(bio)
+
+  cardInfo.addEventListener('click', () => {event.target.style.backgroundColor = 'blue';});
+
+  return container
+}
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
 
